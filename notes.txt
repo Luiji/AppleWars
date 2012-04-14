@@ -1,0 +1,177 @@
+RETRO VIDEO GAME DESIGN
+
+KEY WORDS
+
+* X: the position of an item from the left of the screen
+* Y: the position of an item from the top of the screen
+* Sprite: a moveable image on the screen
+* Tile: a static image on the screen stored in a Tile Map
+* Tile Map: grid of numbers identifying tile images
+* Collision Detection: detecting whether or not two sprites are overlapping
+* Camera: offset values indicating the current view into the level
+* Source Code: text that the computer can understand and act on
+* Programming Language: specific syntax of source code
+* Lua: the programming language I will cover
+* Love: the game engine I will use
+* Game Framework: reusable source code used to make games faster
+* Function: reusable set of named instructions that can take a series of parameters and, optionally, "return" a value (see later)
+* Variable: a name that can be given a value
+* Global: a variable accessible from any function
+* Local: a variable accessible from this function only and that is forgotten when it exits
+* Number: you know, 1, 2, 3, 42, 3.14159, etc.
+* String: a block of text
+* Table: a series of pairs of other variables (better explanation below)
+* Conditional: instruction that executes more than one possible set of instructions based on the result of another instruction
+* Loop: a set of instructions that are executed until a certain condition becomes false
+
+VARIABLES
+
+To assign a value to a variable (i.e. to set myAwesomeVariable to 10):
+
+  myAwesomeVariable = 10
+
+Variables that have not been declared yet are assumed to be global. To declare a variable as local, first do:
+
+  local myAwesomeVariable
+
+You can use variables in mathematical equations, too:
+
+  x = y * 50 - 4 / z
+
+Note that * indicates multiplication and / indicates division.
+
+FUNCTIONS
+
+To declare a function (i.e. that sets the global variable x to 10, takes a number and returns it plus 5), do something like:
+
+  function anyNameYouWant (aNumber):
+    x = 10
+    return aNumber + 5
+  end
+
+To call a function, passing it any parameters you want to, do:
+
+  anyNameYouWant (10)
+
+Where 10 is your parameter. If multiple parameters are involved, separate them with commas. You can make function calls within other functions, too, and they may even call themselves.
+
+To get the "returned" value from a function, do something like:
+
+  aVariable = anyNameYouWant (10)
+
+Which sets aVariable to the returned value (which, in this case, should be 15).
+
+STRING
+
+Strings are sets of characters storing text. To store the string Cheese in the variable myString, do:
+
+  myString = "Cheese"
+
+Note the quotes, which indicate that this is a string and not a variable reference.
+
+Strings can be compared for conditionals (see below) and can be concatenated. Concatenation uses the .., as in:
+
+  myString = "Cheese" .. " and some " .. myOtherString
+
+TABLES
+
+Tables are a special type of variable that contains pairs of other variables. The first variable in each pair are unique and can be passed to the table to get the other variable. For example, let me create an empty table with this code:
+
+  myTable = {}
+
+To add a variable pair where the unique part is 5 and the other is 10, I do:
+
+  myTable[5] = 10
+
+Then, if I ever want to get that variable, I do:
+
+  theValue = myTable[5]
+
+I can also fill up the table when I first create it, like such:
+
+  myTable = {[5] = 10, [6] = 11, ["hello"] = "world"}
+
+If the unique part is a string, you can also do:
+
+  myTable = {hello = "world", x = 15, y = 10}
+
+Leaving out the [""].
+
+If you do not specify the unique part, they are assumed to be 1, 2, 3, 4, 5, etc.
+
+  myTable = {"hello", "world", "!"}
+  thisWillBeWorld = myTable[2]
+
+CONDITIONALS
+
+Conditonals take a condition and decide which set of instructions to execute based on it. For example:
+
+  if x == 15 then
+    y = 5
+    z = 10
+  end
+
+This only executes y = 5 and x = 10 if x equals 15. Note that two equals signs were used in the condition: this indicates a test for equality, as opposed to an assignment of a variable.
+
+Multiple conditions can be tested for, and you can also test for a none-of-the-above condition, i.e.:
+
+  if x == 5 then
+    y = 0
+    z = 5
+  elseif x == 10 then
+    y = 5
+    z = 10
+  elseif x == 15 then
+    y = 100
+    z = 1000
+  else
+    y = 0
+    z = 0
+  end
+
+LOOPS
+
+Loops execute the same set of instructions until a condition is false. This example calls the function doSomething over and over until x no longer equals 10 (additional note: ~= means test for inequality):
+
+  while x ~= 10 do
+    doSomething ()
+  end
+
+Another type of loop gets each value from a table and executes a set of instructions with it. For instance, this code gets each item from myTable, storing the element's name in index and the value in value, and then passes them to doSomething.
+
+  for index, value in pairs (table) do
+    doSomething (index, value)
+  end
+
+SPRITES
+
+Sprites are movable elements that appear on the screen. In my code I store them as a table where element ["x"] is its position to the right, element ["y"] is its position downwards, and element ["type"] is a string identifying what type of sprite it is. I use "player" to indicate it is the player and "enemy" to indicate that it is an enemy. I selected those numbers for fun.
+
+I then store these sprites into another table, which I named "sprites".
+
+TILE MAP
+
+A tile map is a table containing a list of numbers indicating, on a grid, the images that are to be displayed as the background. I use 0 to indicate no image, 1 to indicate a black square and 2 to indicate a white one. I store this table under the name "tiles", which contains a series of other tables representing rows in the grid.
+
+The main advantage of tile maps is that checking for collisions between tiels and sprites becomes much more efficient (see below).
+
+COLLISION DETECTION
+
+To detect whether or not two sprites are overlapping, I simply ask:
+
+* Is sprite one above sprite two?
+* Is sprite one below sprite two?
+* Is sprite one to the left of sprite two?
+* Is sprite one to the right of sprite two?
+
+If the answer is yes to any of the above, they are not overlapping. Otherwise, they are.
+
+The great thing about a tile map is that I can check which tiles each sprite has a chance of overlapping, and then only run this code in reference with that sprite and those tiles, reducing the number of checks I have to run and speeding up the game.
+
+CAMERAS
+
+In 2-D gaming terminology, the "camera" is a nickname for the current viewable area of the level (the part that is drawn on the screen). It is stored as two values (in our code they are called cameraX and cameraY); in order to draw the relavent part of the level, we subtract the X and Y positions of each image we draw by cameraX and cameraY, respectively. We move the camera when the player gets near the edges of the screen so its always visible.
+
+LINKS
+
+The source code for this game will be made available at my GitHub page <https://github.com/Luiji>. It uses the LÖVE video game engine available at <https://love2d.org/> (your web browser might give you a certificate security warning; ignore it, its just a site quirk in this case). The LÖVE website also contains game development tutorials and links to documentation on the Lua programming language. If you have any follow-up questions you did not think of while in class, feel free to e-mail me at <luiji@users.sourceforge.net>.

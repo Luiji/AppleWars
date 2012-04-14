@@ -1,0 +1,16 @@
+BUILDING RETRO VIDEO GAMES
+
+Do you remember Mario back when he was pixelated and could only move in four directions? How about when Sonic was a decent series? Ever wondered how these games worked?
+
+Come to BUILDING RETRO VIDEO GAMES and I'll teach you about the guts of these old games:
+
+* Sprites: the player, enemies and coins
+* Tile Maps: the ground, walls and water
+* Collision Detection: why everything doesn't just fall through the floor
+* And more!
+
+In the end we will have constructed a basic game of our own, displaying how all this stuff works. I will have tought you how these games work and how to make a simple one by yourself using the LÖVE video game engine.
+
+PREREQUISITES
+
+Basic algebra, an interest in 2-D video games and a little patience. I will be teaching you some basic computer programming, so you should be able to see code and not freak out. Its not as complicated as it looks, I promise!
